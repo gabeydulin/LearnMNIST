@@ -1,7 +1,10 @@
-# This sciprt file contains a frame for learning handwritten digitals from the MNIST dataset
+
+source('LearnModel.R');
+source('load_data.R');
+source('testModel.R');
 
 # load training data from files
-data <- loadMNISTData("C:\\Users\\User\\YandexDisk\\teaching\\advanced_topics_in_machine_learning\\train-images.idx3-ubyte", "C:\\Users\\User\\YandexDisk\\teaching\\advanced_topics_in_machine_learning\\train-labels.idx1-ubyte")
+data <- loadMNISTData("e:\\RAMIS\\train-images-idx3-ubyte\\train-images.idx3-ubyte", "e:\\RAMIS\\train-labels-idx1-ubyte\\train-labels.idx1-ubyte")
 trainLabels <- data$labels
 trainData <- data$data
 
@@ -10,38 +13,59 @@ print(dim(trainLabels))
 # trainingData should be 60000x786,  60000 data and 784 features (28x28), tha matrix trainData has 60000 rows and 784 columns
 # trainingLabels should have 60000x1, one class label \in {0,1,...9} for each data.
 
-#uncomment the following 3 lines to see the nth training example and its class label.
-# n = 10;
-# image( t(matrix(trainData[n, ], ncol=28, nrow=28)), Rowv=28, Colv=28, col = heat.colors(256),  margins=c(5,10))
-# print("Class label:"); print(trainLabels[n])
+ #uncomment the following 3 lines to see the nth training example and its class label.
+#  n <- 9986;
+#  image( t(matrix(trainData[n, ], ncol=28, nrow=28)), Rowv=28, Colv=28, col = heat.colors(256),  margins=c(5,10))
+#  print("Class label:"); 
+#  print(trainLabels[n])
 
-# train a model
-classifier <- learnModel(data = trainData, labels = trainLabels)
-predictedLabels <- testModel(classifier, trainData)
+ #normalize the input features
+ 
+ for (i in 1:nrow(trainData)){
+     trainData[i,]<-trainData[i,]/255;
+ }
+ 
+ #add 1 for bias
+ trainData <- cbind(1, trainData);
+ 
+ #logistic regression implementation 
+ 
+ #thetha.Matrix -10 learned vectors theta for each label(0,1,2,3,4,5,6,7,8,9)
+ theta.Matrix<- matrix(data=0,nrow = nrow(trainData), ncol = 10)
+ # train a model
+ #learn theta for each label
+  for (i in 0:9){
+   theta.Matrix[,i+1]<-learnModel(i, trainData, trainLabels)  
+ }
 
-#calculate accuracy on training data
-print("accuracy on training data:\t")
-print(sum(predictedLabels == trainLabels)/length(trainLabels))
 
-#calculate the following error metric for each class obtained on the train data:
-#Recall, precision, specificity, F-measure, FDR and ROC for each class separately. Use a package for ROC. 
+ predictedLabels <- matrix(data=0, nrow = nrow(trainLabels), ncol=1);
+ predictedLabels <- testModel(thetha.Matrix,trainData); 
+ #calculate accuracy on training data
+ print("accuracy on training data:\t");
+ print(sum(predictedLabels == trainLabels)/length(trainLabels));
+ 
+ 
+ # test the model
+  data <- loadMNISTData("e:\\RAMIS\\t10k-images-idx3-ubyte\\t10k-images.idx3-ubyte", "e:\\RAMIS\\t10k-labels-idx1-ubyte\\t10k-labels.idx1-ubyte")
+  testLabels <- data$labels
+  testData <- data$data
+ 
+ 
+ # сделать нормализацию
+ #normalize the input features
+ 
+ for (i in 1:nrow(testData)){
+   testData[i,]<-testData[i,]/255;
+ }
+  
+  #add 1 for bias
+  testData <- cbind(1, testData);
+  
+  predictedLabels <- matrix(data=0, nrow = nrow(testData), ncol=1);
+  predictedLabels <- testModel(theta.Matrix,testData); 
 
-
-# test the model
-data <- loadMNISTData("C:\\Users\\User\\YandexDisk\\teaching\\advanced_topics_in_machine_learning\\t10k-images.idx3-ubyte", "C:\\Users\\User\\YandexDisk\\teaching\\advanced_topics_in_machine_learning\\t10k-labels.idx1-ubyte")
-testLabels <- data$labels
-testData <- data$data
-
-print(dim(testData))
-print(dim(testLabels))
-#trainingData should be 10000x786,  10000 data and 784 features (28x28), tha matrix trainData has 10000 rows and 784 columns
-#trainingLabels should have 10000x1, one class label \in {0,1,...9} for each data.
-
-predictedLabels <- testModel(classifier, testData)
-
-#calculate accuracy
-print("accuracy on test data:\t")
-print(sum(predictedLabels == testLabels)/length(testLabels))
-
-#calculate the following error metric for each class obtained on the test data:
-#Recall, precision, specificity, F-measure, FDR and ROC for each class separately. Use a package for ROC. 
+  #calculate accuracy
+  print("accuracy on test data:\t")
+  print(sum(predictedLabels == testLabels)/length(testLabels))
+ 
