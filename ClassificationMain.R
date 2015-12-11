@@ -1,10 +1,10 @@
-
-source('LearnModel.R');
-source('load_data.R');
-source('testModel.R');
+# 
+ source('LearnModel.R');
+ source('load_data.R');
+ source('testModel.R');
 
 # load training data from files
-data <- loadMNISTData("e:\\RAMIS\\train-images-idx3-ubyte\\train-images.idx3-ubyte", "e:\\RAMIS\\train-labels-idx1-ubyte\\train-labels.idx1-ubyte")
+data <- loadMNISTData("D:\\Ramis\\ML\\DigitDataSet\\train-images-idx3-ubyte\\train-images.idx3-ubyte", "D:\\Ramis\\ML\\DigitDataSet\\train-labels-idx1-ubyte\\train-labels.idx1-ubyte")
 trainLabels <- data$labels
 trainData <- data$data
 
@@ -19,11 +19,8 @@ print(dim(trainLabels))
 #  print("Class label:"); 
 #  print(trainLabels[n])
 
- #normalize the input features
- 
- for (i in 1:nrow(trainData)){
-     trainData[i,]<-trainData[i,]/255;
- }
+ #normalize the input data
+ trainData<-trainData/255;
  
  #add 1 for bias
  trainData <- cbind(1, trainData);
@@ -47,17 +44,13 @@ print(dim(trainLabels))
  
  
  # test the model
-  data <- loadMNISTData("e:\\RAMIS\\t10k-images-idx3-ubyte\\t10k-images.idx3-ubyte", "e:\\RAMIS\\t10k-labels-idx1-ubyte\\t10k-labels.idx1-ubyte")
+  data <- loadMNISTData("D:\\Ramis\\ML\\DigitDataSet\\t10k-images-idx3-ubyte\\t10k-images.idx3-ubyte", "D:\\Ramis\\ML\\DigitDataSet\\t10k-labels-idx1-ubyte\\t10k-labels.idx1-ubyte")
   testLabels <- data$labels
   testData <- data$data
  
  
- # сделать нормализацию
- #normalize the input features
- 
- for (i in 1:nrow(testData)){
-   testData[i,]<-testData[i,]/255;
- }
+ #normalize the input data
+   testData<-testData/255;
   
   #add 1 for bias
   testData <- cbind(1, testData);

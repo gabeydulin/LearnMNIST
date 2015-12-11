@@ -13,12 +13,12 @@ learnModel <- function(label, trainData, trainLabels){
   }
   #initialization of parameters
   epsilon<-0.001;#Termination of the learning
-  mu<-0.5;# learning rate
-  lambda <-0.5;# learning rate
+  mu<-0.01;# learning rate
+  lambda <-0.1;# learning rate
   J<-epsilon+1;
   prevJ<-0;
   g<-matrix(data = 0, nrow = nrow(trainData), ncol = 1)# vector for sigmoid function, 60000*1
-  one<-matrix(1,nrow = nrow(trainData), ncol = 1)# vector of '1', 60000*1
+  
   theta <- matrix((runif(ncol(trainData), min = -0.001, max = 0.001)), ncol=1, nrow=ncol(trainData)); #vector 785*1
   
   f <- function(x) 1/(1+exp(-x)); #sigmoid
@@ -28,13 +28,18 @@ learnModel <- function(label, trainData, trainLabels){
     delta<-t(trainData)%*%(g-y);
     delta[-1]<-delta[-1]-2*lambda*mu*theta[-1]; #Add up regularization term without the bias.
     theta<-theta - mu*delta;
-    
-    error.matrix <- (-y*log(g+0.0001) - (one-y)*log(one-g+0.0001))
+    # add 0.000001 to avoid log(0)
+    error.matrix <- (-y*log(g+0.000001) - (1-y)*log(1-g+0.000001))
     error.sum<-sum(error.matrix);
-    error=((1/nrow(trainData))*error.sum) +lambda*sum(theta[-1]*theta[-1]); 
+    error=((1/nrow(trainData))*error.sum) +lambda*sum(theta[-1]^2); 
     print(error);
     prevJ<-J;
     J<-error;
+    #trying to adjust mu
+    if (J>prevJ){
+      mu<-mu/2
+    };
+    
   }
   return(theta);
 }
