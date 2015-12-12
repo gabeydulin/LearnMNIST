@@ -28,7 +28,7 @@ print(dim(trainLabels))
  #logistic regression implementation 
  
  #thetha.Matrix -10 learned vectors theta for each label(0,1,2,3,4,5,6,7,8,9)
- theta.Matrix<- matrix(data=0,nrow = nrow(trainData), ncol = 10)
+ theta.Matrix<- matrix(data=0,nrow = ncol(trainData), ncol = 10)
  # train a model
  #learn theta for each label
   for (i in 0:9){
@@ -37,7 +37,7 @@ print(dim(trainLabels))
 
 
  predictedLabels <- matrix(data=0, nrow = nrow(trainLabels), ncol=1);
- predictedLabels <- testModel(thetha.Matrix,trainData); 
+ predictedLabels <- testModel(theta.Matrix,trainData); 
  #calculate accuracy on training data
  print("accuracy on training data:\t");
  print(sum(predictedLabels == trainLabels)/length(trainLabels));

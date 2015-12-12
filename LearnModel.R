@@ -12,15 +12,14 @@ learnModel <- function(label, trainData, trainLabels){
     }
   }
   #initialization of parameters
-  epsilon<-0.001;#Termination of the learning
-  mu<-0.01;# learning rate
+  epsilon<-0.01;#Termination of the learning
+  mu<-0.0001;# learning rate
   lambda <-0.1;# learning rate
   J<-epsilon+1;
   prevJ<-0;
   g<-matrix(data = 0, nrow = nrow(trainData), ncol = 1)# vector for sigmoid function, 60000*1
   
   theta <- matrix((runif(ncol(trainData), min = -0.001, max = 0.001)), ncol=1, nrow=ncol(trainData)); #vector 785*1
-  
   f <- function(x) 1/(1+exp(-x)); #sigmoid
   
   while (abs(prevJ-J)>epsilon){
@@ -33,6 +32,7 @@ learnModel <- function(label, trainData, trainLabels){
     error.sum<-sum(error.matrix);
     error=((1/nrow(trainData))*error.sum) +lambda*sum(theta[-1]^2); 
     print(error);
+    print(label);
     prevJ<-J;
     J<-error;
     #trying to adjust mu
