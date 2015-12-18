@@ -20,7 +20,7 @@ print(dim(trainLabels))
 #  print(trainLabels[n])
 
  #normalize the input data
- trainData<-trainData/255;
+ trainData <- trainData / 255;
  
  #add 1 for bias
  trainData <- cbind(1, trainData);
@@ -28,19 +28,19 @@ print(dim(trainLabels))
  #logistic regression implementation 
  
  #thetha.Matrix -10 learned vectors theta for each label(0,1,2,3,4,5,6,7,8,9)
- theta.Matrix<- matrix(data=0,nrow = ncol(trainData), ncol = 10)
+ theta.Matrix <- matrix(data = 0, nrow = ncol(trainData), ncol = 10)
  # train a model
  #learn theta for each label
-  for (i in 0:9){
-   theta.Matrix[,i+1]<-learnModel(i, trainData, trainLabels)  
+  for (i in 0:9) {
+   theta.Matrix[, i + 1] <- learnModel(i, trainData, trainLabels)  
  }
 
 
- predictedLabels <- matrix(data=0, nrow = nrow(trainLabels), ncol=1);
- predictedLabels <- testModel(theta.Matrix,trainData); 
+ predictedLabels <- matrix(data = 0, nrow = nrow(trainLabels), ncol = 1);
+ predictedLabels <- testModel(theta.Matrix, trainData); 
  #calculate accuracy on training data
  print("accuracy on training data:\t");
- print(sum(predictedLabels == trainLabels)/length(trainLabels));
+ print(sum(predictedLabels == trainLabels) / length(trainLabels));
  
  
  # test the model
@@ -50,15 +50,15 @@ print(dim(trainLabels))
  
  
  #normalize the input data
-   testData<-testData/255;
+   testData <- testData / 255;
   
   #add 1 for bias
   testData <- cbind(1, testData);
   
-  predictedLabels <- matrix(data=0, nrow = nrow(testData), ncol=1);
-  predictedLabels <- testModel(theta.Matrix,testData); 
+  predictedLabels <- matrix(data = 0, nrow = nrow(testData), ncol = 1);
+  predictedLabels <- testModel(theta.Matrix, testData); 
 
   #calculate accuracy
   print("accuracy on test data:\t")
-  print(sum(predictedLabels == testLabels)/length(testLabels))
+  print(sum(predictedLabels == testLabels) / length(testLabels))
  
